@@ -1,0 +1,5 @@
+<ul>
+    {{#projects}}
+        <li><a class="{{#if (checkName ../name this) }}bold{{/if}}" href="/{{ . }}/description">{{ this }}</a></li>
+    {{/projects}}
+</ul>

@@ -1,0 +1,31 @@
+body{
+    background-color: red;
+}
+
+
+.layout {
+    color: white;
+    border: 1px solid red;
+    background-color: red;
+    padding: 20px;
+}
+
+.view {
+    color: white;
+    border: 1px solid red;
+    background-color: red;
+    padding: 20px;
+    margin: 20px;
+}
+
+.partial {
+    border: 1px dotted blue;
+    background-color: #90B6EE;
+    padding: 20px;
+    margin: 20px;
+}
+#paint{
+    width: 400px;
+    height: 200px;
+    z-index: 1;
+}
