@@ -16,6 +16,15 @@ exports.submitSignature = function(firstname, lastname, signature){
 };
 
 
+exports.signersList = function(){
+    return db.query(
+        // `SELECT COUNT(*) FROM signatures`
+    );
+};
+//when calling signerList in server.js
+//db.signerList().then(result =>{
+//let signers = result.row
+//pass the result back into the handlebars, loop through it
 
 
 
