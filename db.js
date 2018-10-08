@@ -1,4 +1,5 @@
 var spicedPg = require('spiced-pg');
+const bcrypt = require('bcryptjs');
 const {spicedling, password} = require('./secrets');
 var db = spicedPg(`postgres:${spicedling}:${password}@localhost:5432/petition`);
 
@@ -26,6 +27,51 @@ exports.signersList = function(){
 //let signers = result.row
 //pass the result back into the handlebars, loop through it
 
+exports.insertNewUser = function(first, last, email, hashedPw) {
+    const q = `
+        INSERT INTO users
+        (first, last, email, password)
+        VALUES
+        ($1, $2, $3, $4)
+        RETURNING id
+    `;
+    const params = [
+        first || null,
+        last || null,
+        email || null,
+        hashedPw || null
+    ];
+
+    return db.query(q, params);
+};
+
+exports.hashPassword = function(plainTextPassword) {
+    return new Promise(function(resolve, reject) {
+        bcrypt.genSalt(function(err, salt) {
+            if (err) {
+                return reject(err);
+            }
+            bcrypt.hash(plainTextPassword, salt, function(err, hash) {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(hash);
+            });
+        });
+    });
+};
+
+exports.checkPassword = function(textEnteredInLoginForm, hashedPasswordFromDatabase) {
+    return new Promise(function(resolve, reject) {
+        bcrypt.compare(textEnteredInLoginForm, hashedPasswordFromDatabase, function(err, doesMatch) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(doesMatch);
+            }
+        });
+    });
+};
 
 
 

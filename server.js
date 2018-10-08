@@ -5,7 +5,7 @@ var db = require('./db');
 var cookieSession = require('cookie-session');
 
 app.use(cookieSession({
-    secret: `I'm always angry.`,
+    secret: `Feel the fear and do it anyway.`,
     maxAge: 1000 * 60 * 60 * 24 * 14
 }));
 //in the POST petition route we get the req.session.signatureId =id; and put it in our session
@@ -64,7 +64,7 @@ app.post("/", (req, res) => {
 
 
 app.get('/petition', (req, res) => {
-    console.log('petition with cute animal!');
+    // console.log('petition with cute animal!');
     res.render('petition', {
         layout: 'main'
     //     title: "PETITION"
@@ -81,21 +81,73 @@ app.post('/petition', (req, res) => {
     res.redirect('/');
 });
 
-app.get('/cute-animals', (req, res) => {
-    console.log('GET cute animals!');
-    res.render('cute-animals', {
-        layout: 'main',
+app.get('/petition', (req, res) => {
+
+    res.render('petition', {
+        layout: 'main'
     //     title: "PETITION"
     });
 });
-app.post("/cute-animals", (req, res) => {
-    console.log("/POST cute animals", req.body.animal);
-    req.session.animal = req.body.animal;
-    console.log('req.session', req.session);
 
-    //this is how we access our cookie, req.session is an object
-    //we add an property "animal" and the value
+app.get('/login', (req, res) => {
+    res.render('login', {
+        layout: 'main'
+
+    });
 });
+app.get('/register', (req, res) => {
+    res.render('register', {
+        layout: 'main'
+
+    });
+});
+app.post('/register', (req, res) => {
+    console.log(req.body);
+    db.hashPassword(req.body.password)
+        .then(hash => {
+            db.insertNewUser(req.body.first, req.body.last, req.body.email, hash)
+
+                .then(results => {
+                    console.log("here are my results", results.rows);
+                    req.session.userId = results.rows[0].id;
+                    req.session.firstname = req.body.first;
+                    req.session.lastname = req.body.last;
+                    console.log(req.session);
+                    res.redirect('/petition');
+                    // you would set the session here!
+                    // req.session.userId = results.rows[0].id
+                })
+                .catch(err => console.log(err.message));
+
+        });
+});
+///////////////// login /////////////////////////
+
+
+// app.post('/login', (req, res) => {
+//     db.checkPassword(password)
+//         .then(hash => {
+//             db.insertNewUser(req.body.first, req.body.last, req.body.email, hash)
+//
+//                 .then(results => {
+//                     console.log("here are my results", results.rows);
+//                     req.session.userId = results.rows[0].id;
+//                     req.session.firstname = req.body.first;
+//                     req.session.lastname = req.body.last;
+//                     console.log(req.session);
+//                     res.redirect('/petition');
+//                     // you would set the session here!
+//                     // req.session.userId = results.rows[0].id
+//                 })
+//                 .catch(err => console.log(err.message));
+//         });
+// });
+
+
+
+//this is how we access our cookie, req.session is an object
+//we add an property "animal" and the value
+
 
 
 
