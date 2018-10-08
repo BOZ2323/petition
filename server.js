@@ -124,24 +124,20 @@ app.post('/register', (req, res) => {
 ///////////////// login /////////////////////////
 
 
-// app.post('/login', (req, res) => {
-//     db.checkPassword(password)
-//         .then(hash => {
-//             db.insertNewUser(req.body.first, req.body.last, req.body.email, hash)
-//
-//                 .then(results => {
-//                     console.log("here are my results", results.rows);
-//                     req.session.userId = results.rows[0].id;
-//                     req.session.firstname = req.body.first;
-//                     req.session.lastname = req.body.last;
-//                     console.log(req.session);
-//                     res.redirect('/petition');
-//                     // you would set the session here!
-//                     // req.session.userId = results.rows[0].id
-//                 })
-//                 .catch(err => console.log(err.message));
-//         });
-// });
+app.post('/login', (req, res) => {
+    db.getHashedPasswordfromDB(req.body.email)
+        .then(result => {
+                    console.log("login result", result);
+                    checkPassword(req.body.password, result)
+                        .then
+
+
+
+
+                })
+
+        });
+});
 
 
 

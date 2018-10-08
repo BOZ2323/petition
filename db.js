@@ -16,10 +16,16 @@ exports.submitSignature = function(firstname, lastname, signature){
 
 };
 
+exports.getHashedPasswordfromDB = function(email){
+    let q = `SELECT password FROM users WHERE email = $1 RETURNING password`;
+    let params = [email];
+    return db.query(q, params)
+
+};
 
 exports.signersList = function(){
     return db.query(
-        // `SELECT COUNT(*) FROM signatures`
+        `SELECT COUNT(*) FROM signatures`
     );
 };
 //when calling signerList in server.js
