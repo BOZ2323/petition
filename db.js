@@ -17,14 +17,14 @@ exports.submitSignature = function(firstname, lastname, signature){
 };
 
 exports.getHashedPasswordfromDB = function(email){
-    let q = `SELECT password FROM users WHERE email = $1 RETURNING password`;
+    let q = `SELECT password FROM users WHERE email = $1`;
     let params = [email];
     return db.query(q, params);
 
 };
 
 exports.getIdfromDB = function(email){
-    let q = `SELECT id FROM users WHERE email = $1 RETURNING id`;
+    let q = `SELECT id FROM users WHERE email = $1`;
     let params = [email];
     return db.query(q, params);
 

@@ -123,34 +123,32 @@ app.post('/register', (req, res) => {
 });
 ///////////////// login /////////////////////////
 
-
+////
 app.post('/login', (req, res) => {
     console.log("login works!!");
     db.getHashedPasswordfromDB(req.body.email)
         .then(result => {
-            return db.checkPassword(req.body.password, result);
+            console.log("result", result.rows[0].password);
+            console.log( db.checkPassword(req.body.password, result.rows[0].password));
+            // compares entered password with hashed password
+            return db.checkPassword(req.body.password, result.rows[0].password);
+            // compares entered password with hashed password
         })
         .then(answer => {
-            if (answer) {
+            if (answer) { //if it is true go on here and get the user ID
                 console.log("is true: ", answer);
                 db.getIdfromDB(req.body.email).then(result => {
-                    req.session.user = result;
+                    console.log("result NEU", result.rows[0].id);
+                    req.session.user = result.rows[0].id;
                     res.redirect("/");
                 });
-            } else {
+            } else { //if it false go on here
                 console.log("Incorrect Password");
                 res.render("login", {
                     layout: "main",
-                    title: "PETITION",
-                    error: "error"
-                });
+                    error: "error"                });
             }
         });
-
-
-
-
-
 });
 
 
