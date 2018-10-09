@@ -125,19 +125,36 @@ app.post('/register', (req, res) => {
 
 
 app.post('/login', (req, res) => {
+    console.log("login works!!");
     db.getHashedPasswordfromDB(req.body.email)
         .then(result => {
-                    console.log("login result", result);
-                    checkPassword(req.body.password, result)
-                        .then
-
-
-
-
-                })
-
+            return db.checkPassword(req.body.password, result);
+        })
+        .then(answer => {
+            if (answer) {
+                console.log("is true: ", answer);
+                db.getIdfromDB(req.body.email).then(result => {
+                    req.session.user = result;
+                    res.redirect("/");
+                });
+            } else {
+                console.log("Incorrect Password");
+                res.render("login", {
+                    layout: "main",
+                    title: "PETITION",
+                    error: "error"
+                });
+            }
         });
+
+
+
+
+
 });
+
+
+
 
 
 
