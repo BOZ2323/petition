@@ -47,35 +47,29 @@ app.get('/thankYou', (req, res) => {
         title: "PETITION"
     });
 });
-app.get('/supporter', (req, res) => {
+app.get('/supporter', checkForRegistrationOrLogin, (req, res) => {
     console.log("req session:", req.session);
     res.render('supporter', {
         layout: 'main',
         title: "PETITION"
     });
 });
-function checkForUser(req,res,next){
-    if(!req.session.userId){
+
+function checkForRegistrationOrLogin(req,res,next){
+    if(!req.session.first){
         res.redirect('/register');
     }else{
         next();
     }
 }
+function checkIfAlreadyLoggedIn(req,res,next){
+    if(!req.session.first){
+        res.redirect('/petition/signers');
+    }else{
+        next();
+    }
+}
 
-// app.post('/login', checkForUser, (req,res)=>{
-//     db.getUserNamefromDB(req.session.userId)
-//         .then(result => {
-//             let firstname = result.rows[0].first;
-//             console.log("result.rows[0].first", result.rows[0].first);
-//             res.redirect('/petition');
-//
-//
-//         })
-//         .catch(err => console.log(err.message));
-//
-//
-//
-// });
 
 
 
@@ -86,15 +80,6 @@ app.post("/thankYou", (req, res) => {
         title: "PETITION"
     });
 });
-
-
-// app.get('/petition', (req, res) => {
-//     console.log("req.session: ",req.session)
-//     res.render('petition', {
-//         layout: 'main'
-//     //     title: "PETITION"
-//     });
-// });
 
 app.post('/petition', (req, res) => {
     // req.session.signature = req.body.signature;
@@ -112,7 +97,7 @@ app.post('/petition', (req, res) => {
 
 });
 
-app.get('/petition', (req, res) => {
+app.get('/petition', checkForRegistrationOrLogin, (req, res) => {
     console.log("first",req.session.first);
     res.render('petition', {
         layout: 'main',
@@ -134,12 +119,14 @@ app.get('/register', (req, res) => {
     });
 });
 
-app.get('/profile', (req, res) => {
+app.get('/profile', checkForRegistrationOrLogin, (req, res) => {
     res.render('profile', {
         layout: 'main'
 
     });
 });
+
+
 
 app.post('/register', (req, res) => {
     console.log(req.body);
@@ -161,9 +148,8 @@ app.post('/register', (req, res) => {
 
         });
 });
-///////////////// login /////////////////////////
 
-////
+
 app.post('/login', (req, res) => {
     console.log("login works!!");
     db.getHashedPasswordfromDB(req.body.email)

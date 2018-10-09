@@ -7,11 +7,11 @@ var db = spicedPg(`postgres:${spicedling}:${password}@localhost:5432/petition`);
 
 
 
-exports.submitSignature = function(firstname, lastname, signature){
+exports.submitSignature = function(signature, user_id){
     return db.query(
-        `INSERT INTO signatures (first, last, signature)
+        `INSERT INTO signatures (signature, user_id)
         VALUES($1,$2,$3) RETURNING id`,
-        [firstname || null , lastname || null , signature || null ]
+        [signature || null , user_id || null]
     );
 
 };
@@ -39,7 +39,10 @@ exports.getUserNamefromDB = function(id){
 exports.signersList = function(){
     return db.query(
         `SELECT COUNT(*) FROM signatures`
-    );
+    ).then(num => {
+        return num.rows[0].count;
+    });
+
 };
 //when calling signerList in server.js
 //db.signerList().then(result =>{
