@@ -54,7 +54,32 @@ app.get('/supporter', (req, res) => {
         title: "PETITION"
     });
 });
-app.post("/", (req, res) => {
+function checkForUser(req,res,next){
+    if(!req.session.userId){
+        res.redirect('/register');
+    }else{
+        next();
+    }
+}
+
+// app.post('/login', checkForUser, (req,res)=>{
+//     db.getUserNamefromDB(req.session.userId)
+//         .then(result => {
+//             let firstname = result.rows[0].first;
+//             console.log("result.rows[0].first", result.rows[0].first);
+//             res.redirect('/petition');
+//
+//
+//         })
+//         .catch(err => console.log(err.message));
+//
+//
+//
+// });
+
+
+
+app.post("/thankYou", (req, res) => {
     // console.log("REQ BODY: ", req.body);
     res.render("thankYou", {
         layout: "main",
@@ -63,31 +88,38 @@ app.post("/", (req, res) => {
 });
 
 
-app.get('/petition', (req, res) => {
-    // console.log('petition with cute animal!');
-    res.render('petition', {
-        layout: 'main'
-    //     title: "PETITION"
-    });
-});
+// app.get('/petition', (req, res) => {
+//     console.log("req.session: ",req.session)
+//     res.render('petition', {
+//         layout: 'main'
+//     //     title: "PETITION"
+//     });
+// });
 
 app.post('/petition', (req, res) => {
-
+    // req.session.signature = req.body.signature;
     let fname= req.body.firstname;
     let lname= req.body.lastname;
     let sig= req.body.hidden;
-    console.log(fname,lname, sig);
-    db.submitSignature(fname,lname,sig);
-    res.redirect('/');
+    console.log("firstname, lastname, signature: ",fname,lname, sig);
+    db.submitSignature(fname,lname,sig)
+        .then(result => {
+            req.session.signatureId = result.rows[0].id;
+            res.redirect('/thankYou');
+        })
+        .catch(err => console.log(err.message));
+
+
 });
 
 app.get('/petition', (req, res) => {
-
+    console.log("first",req.session.first);
     res.render('petition', {
-        layout: 'main'
-    //     title: "PETITION"
+        layout: 'main',
+        firstname: req.session.first
     });
 });
+
 
 app.get('/login', (req, res) => {
     res.render('login', {
@@ -101,6 +133,14 @@ app.get('/register', (req, res) => {
 
     });
 });
+
+app.get('/profile', (req, res) => {
+    res.render('profile', {
+        layout: 'main'
+
+    });
+});
+
 app.post('/register', (req, res) => {
     console.log(req.body);
     db.hashPassword(req.body.password)
@@ -113,7 +153,7 @@ app.post('/register', (req, res) => {
                     req.session.firstname = req.body.first;
                     req.session.lastname = req.body.last;
                     console.log(req.session);
-                    res.redirect('/petition');
+                    res.redirect('/profile');
                     // you would set the session here!
                     // req.session.userId = results.rows[0].id
                 })
@@ -128,9 +168,6 @@ app.post('/login', (req, res) => {
     console.log("login works!!");
     db.getHashedPasswordfromDB(req.body.email)
         .then(result => {
-            console.log("result", result.rows[0].password);
-            console.log( db.checkPassword(req.body.password, result.rows[0].password));
-            // compares entered password with hashed password
             return db.checkPassword(req.body.password, result.rows[0].password);
             // compares entered password with hashed password
         })
@@ -139,8 +176,10 @@ app.post('/login', (req, res) => {
                 console.log("is true: ", answer);
                 db.getIdfromDB(req.body.email).then(result => {
                     console.log("result NEU", result.rows[0].id);
-                    req.session.user = result.rows[0].id;
-                    res.redirect("/");
+                    req.session.userId = result.rows[0].id;
+                    req.session.first = result.rows[0].first;
+                    console.log("*********",result.rows[0]);
+                    res.redirect("/petition");
                 });
             } else { //if it false go on here
                 console.log("Incorrect Password");
@@ -157,7 +196,7 @@ app.post('/login', (req, res) => {
 
 
 //this is how we access our cookie, req.session is an object
-//we add an property "animal" and the value
+//e,g. we add an property "id" and the value
 
 
 
@@ -174,4 +213,4 @@ app.listen(8080, () => {
 
 
 
-//////////// console.log to get rid of red dot linter terror /////
+//////////// console.log to get rid of red dot linter terror ////

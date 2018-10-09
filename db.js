@@ -24,8 +24,14 @@ exports.getHashedPasswordfromDB = function(email){
 };
 
 exports.getIdfromDB = function(email){
-    let q = `SELECT id FROM users WHERE email = $1`;
+    let q = `SELECT * FROM users WHERE email = $1`;
     let params = [email];
+    return db.query(q, params);
+
+};
+exports.getUserNamefromDB = function(id){
+    let q = `SELECT first FROM users WHERE id = $1`;
+    let params = [id];
     return db.query(q, params);
 
 };
