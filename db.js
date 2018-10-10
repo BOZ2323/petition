@@ -8,10 +8,11 @@ var db = spicedPg(`postgres:${spicedling}:${password}@localhost:5432/petition`);
 
 
 exports.submitSignature = function(signature, user_id){
+    console.log("signature",signature);
     return db.query(
         `INSERT INTO signatures (signature, user_id)
-        VALUES($1,$2,$3) RETURNING id`,
-        [signature || null , user_id || null]
+        VALUES ($1,$2) RETURNING id`,
+        [signature, user_id]
     );
 
 };
@@ -20,6 +21,28 @@ exports.getHashedPasswordfromDB = function(email){
     let q = `SELECT password FROM users WHERE email = $1`;
     let params = [email];
     return db.query(q, params);
+
+};
+exports.getPicture = function(user_id){
+    let q = `SELECT signature FROM signatures WHERE user_id = $1`;
+    let params = [user_id];
+    return db.query(q, params);
+
+};
+// exports.getProfileData = function(user_id){
+//     let q = `SELECT * FROM user_profiles WHERE user_id = $1`;
+//     let params = [user_id];
+//     return db.query(q, params);
+//
+// };
+
+exports.submitProfileData = function(age, city, url, user_id){
+    console.log("db.query: age",age);
+    return db.query(
+        `INSERT INTO user_profiles (age, city, url, user_id)
+        VALUES ($1,$2,$3,$4) RETURNING id`,
+        [age, city, url, user_id]
+    );
 
 };
 

@@ -12,41 +12,34 @@ app.use(cookieSession({
 //in the thankyou, write database query, to receive users id and in return give us users signature
 // this signature is the url
 
-const http = require('http');
-const fs = require('fs');
-const path = require('path');
+// const http = require('http');
+// const fs = require('fs');
+// const path = require('path');
 const hb = require('express-handlebars');
-const projects = __dirname + '/projects';
+
 
 
 app.engine('handlebars', hb());
 app.set('view engine', 'handlebars');
-
 app.use(express.static('public'));
-
-
 app.use(require('body-parser').urlencoded({
     extended: false
 }));
 app.use(require('cookie-parser')());
 
 
-// In fact, everything after the function declaration
+// everything after the function declaration
 // in line 12 is technically middleware since it modifies a user request.
 
 app.get('/', (req, res) => {
     res.render('home', {
         layout: 'main',
-        title: "PETITION"
+        title: "home"
     });
 });
 
-app.get('/thankYou', (req, res) => {
-    res.render('thankYou', {
-        layout: 'main',
-        title: "PETITION"
-    });
-});
+
+
 app.get('/supporter', checkForRegistrationOrLogin, (req, res) => {
     console.log("req session:", req.session);
     res.render('supporter', {
@@ -69,36 +62,35 @@ function checkIfAlreadyLoggedIn(req,res,next){
         next();
     }
 }
+app.get('/thankYou', (req, res) => {
+    console.log("Thankyou page");
+    db.getPicture(req.session.userId)
+        .then(result => {
+            res.render('thankYou', {
+                layout: 'main',
+                signature: result.rows[0].signature
+            })
 
-
-
-
-app.post("/thankYou", (req, res) => {
-    // console.log("REQ BODY: ", req.body);
-    res.render("thankYou", {
-        layout: "main",
-        title: "PETITION"
-    });
+        })
+        .catch(err => console.log("error in get/thankYou", err.message));
 });
 
 app.post('/petition', (req, res) => {
-    // req.session.signature = req.body.signature;
-    let fname= req.body.firstname;
-    let lname= req.body.lastname;
+    // console.log("req.session ",req.session);
     let sig= req.body.hidden;
-    console.log("firstname, lastname, signature: ",fname,lname, sig);
-    db.submitSignature(fname,lname,sig)
+    console.log("sig", sig);
+    db.submitSignature(sig, req.session.userId)
+
         .then(result => {
-            req.session.signatureId = result.rows[0].id;
+            // req.session.signatureId = result.rows[0].id;
             res.redirect('/thankYou');
         })
-        .catch(err => console.log(err.message));
-
-
+        .catch(err => console.log("this catch",err.message));
 });
 
-app.get('/petition', checkForRegistrationOrLogin, (req, res) => {
-    console.log("first",req.session.first);
+
+app.get('/petition', (req, res) => {
+    // console.log("first",req.session.first);
     res.render('petition', {
         layout: 'main',
         firstname: req.session.first
@@ -135,11 +127,12 @@ app.post('/register', (req, res) => {
             db.insertNewUser(req.body.first, req.body.last, req.body.email, hash)
 
                 .then(results => {
-                    console.log("here are my results", results.rows);
+                    // console.log("here are my results", results.rows);
                     req.session.userId = results.rows[0].id;
                     req.session.firstname = req.body.first;
                     req.session.lastname = req.body.last;
-                    console.log(req.session);
+                    req.session.first = req.body.first;
+                    // console.log(req.session);
                     res.redirect('/profile');
                     // you would set the session here!
                     // req.session.userId = results.rows[0].id
@@ -171,22 +164,25 @@ app.post('/login', (req, res) => {
                 console.log("Incorrect Password");
                 res.render("login", {
                     layout: "main",
-                    error: "error"                });
+                    error: "error"
+                });
             }
         });
 });
 
-
-
-
-
-
-//this is how we access our cookie, req.session is an object
-//e,g. we add an property "id" and the value
-
-
-
-
+app.post('/profile', (req, res) => {
+    console.log("profile works");
+    console.log("first", req.session.first);
+    let age = req.body.age;
+    let city = req.body.city;
+    let url = req.body.url;
+    db.submitProfileData(age, city, url, req.session.userId)
+    .then(result => {
+        // req.session.signatureId = result.rows[0].id;
+        res.redirect('/petition');
+    })
+    .catch(err => console.log("this catch",err.message));
+});
 
 
 
@@ -195,8 +191,4 @@ app.listen(8080, () => {
     console.log('Glistening on port 8080');
 });
 
-
-
-
-
-//////////// console.log to get rid of red dot linter terror ////
+/////////// console.log to get rid of red dot linter terror //
