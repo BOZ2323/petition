@@ -11,8 +11,8 @@ if (process.env.NODE_ENV === 'production') {
     secrets = process.env;
     dbUrl = secrets.DATABASE_URL;
 } else {
-    secrets = require('./secrets.json');
-    dbUrl = `postgres:${secrets.spicedling}:${secrets.password}@localhost:5432/sage`;
+    const {spicedling, password}  = require('./secrets.json');
+    dbUrl = `postgres:${spicedling}:${password}@localhost:5432/petition`;
 }
 const db = spicedPg(dbUrl);
 

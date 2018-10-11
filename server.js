@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 var db = require('./db');
-var dbUrl = process.env.DATABASE_URL || 'postgres://spicedling:password@localhost:5432/petition';
+
 
 var cookieSession = require('cookie-session');
 
