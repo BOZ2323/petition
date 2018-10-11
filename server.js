@@ -48,6 +48,7 @@ app.get('/supporter', (req, res) => {
             console.log("signedUsers", signedUsers);
             res.render('supporter', {
                 layout: 'main',
+                signedUsers: signedUsers,
                 age: signedUsers.rows[0].age,
                 city: signedUsers.rows[0].city,
                 url: signedUsers.rows[0].url
