@@ -81,12 +81,12 @@ exports.signersCount = function(){
 };
 exports.getSignersList = function(){
     return db.query(`
-        SELECT signatures.userid, first, last, age, url, city
+        SELECT signatures.user_id, first, last, age, url, city
         FROM signatures
         LEFT JOIN users
-        ON signatures.userid = users.id
+        ON signatures.user_id = users.id
         LEFT JOIN user_profiles
-        ON user_profiles.userid = users.id ORDER by signatures.id DESC
+        ON user_profiles.user_id = users.id ORDER by signatures.id DESC
         `);
 };
 
