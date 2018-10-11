@@ -1,8 +1,20 @@
-var spicedPg = require('spiced-pg');
-const bcrypt = require('bcryptjs');
-const {spicedling, password} = require('./secrets');
-var db = spicedPg(`postgres:${spicedling}:${password}@localhost:5432/petition`);
+// var spicedPg = require('spiced-pg');
+// const bcrypt = require('bcryptjs');
+// const {spicedling, password} = require('./secrets');
+// var db = spicedPg(`postgres:${spicedling}:${password}@localhost:5432/petition`);
 
+const spicedPg = require('spiced-pg');
+const bcrypt = require('bcryptjs');
+let secrets;
+let dbUrl;
+if (process.env.NODE_ENV === 'production') {
+    secrets = process.env;
+    dbUrl = secrets.DATABASE_URL;
+} else {
+    secrets = require('./secrets.json');
+    dbUrl = `postgres:${secrets.spicedling}:${secrets.password}@localhost:5432/sage`;
+}
+const db = spicedPg(dbUrl);
 
 
 

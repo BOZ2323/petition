@@ -18,6 +18,7 @@
     "cookie-parser": "^1.4.3",
     "cookie-session": "^2.0.0-alpha.1",
     "csurf": "^1.9.0",
+    "eslint": "^5.6.1",
     "express": "^4.16.3",
     "express-handlebars": "^3.0.0",
     "express-session": "^1.14.1",

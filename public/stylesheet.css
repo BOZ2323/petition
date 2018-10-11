@@ -1,6 +1,11 @@
 body{
     background-color: red;
 }
+.count{
+    color: purple;
+    font-size: 60px;
+    z-index: 1;
+}
 .navbar {
     display: flex;
     background-color: red;
@@ -50,7 +55,7 @@ h1{
 }
 h1{
     color: white;
-    
+
 }
 
 

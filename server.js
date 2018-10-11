@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var db = require('./db');
+var dbUrl = process.env.DATABASE_URL || 'postgres://spicedling:password@localhost:5432/petition';
 
 var cookieSession = require('cookie-session');
 
@@ -64,16 +65,24 @@ function checkIfAlreadyLoggedIn(req,res,next){
 }
 app.get('/thankYou', (req, res) => {
     console.log("Thankyou page");
-    db.getPicture(req.session.userId)
-        .then(result => {
-            res.render('thankYou', {
-                layout: 'main',
-                signature: result.rows[0].signature
-            })
+    db.signersList()
+        .then(count => {
+            console.log("thankyou, count: ",count);
+            db.getPicture(req.session.userId)
+                .then(result => {
+                    res.render('thankYou', {
+                        layout: 'main',
+                        signature: result.rows[0].signature,
+                        count: count
+                    });
 
-        })
-        .catch(err => console.log("error in get/thankYou", err.message));
-});
+                })
+                .catch(err => console.log("error in get/thankYou", err.message));
+        });
+
+
+
+});//app.get
 
 app.post('/petition', (req, res) => {
     // console.log("req.session ",req.session);
@@ -177,17 +186,20 @@ app.post('/profile', (req, res) => {
     let city = req.body.city;
     let url = req.body.url;
     db.submitProfileData(age, city, url, req.session.userId)
-    .then(result => {
+        .then(result => {
         // req.session.signatureId = result.rows[0].id;
-        res.redirect('/petition');
-    })
-    .catch(err => console.log("this catch",err.message));
+            res.redirect('/petition');
+        })
+        .catch(err => console.log("this catch",err.message));
 });
 
 
 
 
-app.listen(8080, () => {
+// app.listen(8080, () => {
+//     console.log('Glistening on port 8080');
+// });
+app.listen(process.env.PORT || 8080, () => {
     console.log('Glistening on port 8080');
 });
 
