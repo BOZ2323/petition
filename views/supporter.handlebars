@@ -1,7 +1,24 @@
 <div class="view">
     <div class="container">
-        
+
         <h1>supporter</h1>
-            {{> projectlist }}
+        {{#signedUsers}}
+        <!-- <p class="signees">{{first}} {{last}}</p> -->
+        {{#if url}}
+            <p class="signees">
+                <i class="fas fa-user-astronaut"></i>  &nbsp;<a class="inline highlighted" href="{{url}}">
+                {{first}} {{last}}</a>
+                {{#if age}}  | {{age}}{{/if}}
+                {{#if city}}  | <a class="inline" href="/petition/signers/{{city}}">{{city}}</a>{{/if}}
+
+            </p>
+        {{else}}
+            <p class="signees">
+                <i class="fas fa-user-astronaut"></i>  &nbsp;{{first}} {{last}}
+                {{#if age}}  |  {{age}}{{/if}}
+                {{#if city}}  |  <a class="inline" href="/petition/signers/{{city}}">{{city}}</a>{{/if}}
+            </p>
+        {{/if}}
+    {{/signedUsers}}
     </div>
 </div>

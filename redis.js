@@ -19,3 +19,5 @@ client.get('funky', function(err, data){
         console.log(data);
     }
 });
+
+get ('funky').then

@@ -41,13 +41,22 @@ app.get('/', (req, res) => {
 
 
 
-app.get('/supporter', checkForRegistrationOrLogin, (req, res) => {
-    console.log("req session:", req.session);
-    res.render('supporter', {
-        layout: 'main',
-        title: "PETITION"
-    });
+app.get('/supporter', (req, res) => {
+    console.log("supporter req session:", req.session);
+    db.getSignersList(req.session.userId)
+        .then(signedUsers => {
+            console.log("signedUsers", signedUsers);
+            res.render('supporter', {
+                layout: 'main',
+                age: signedUsers.rows[0].age,
+                city: signedUsers.rows[0].city,
+                url: signedUsers.rows[0].url
+            });
+
+        })
+        .catch(err => console.log("error in get/supporter", err.message));
 });
+
 
 function checkForRegistrationOrLogin(req,res,next){
     if(!req.session.first){
@@ -65,7 +74,7 @@ function checkIfAlreadyLoggedIn(req,res,next){
 }
 app.get('/thankYou', (req, res) => {
     console.log("Thankyou page");
-    db.signersList()
+    db.signersCount()
         .then(count => {
             console.log("thankyou, count: ",count);
             db.getPicture(req.session.userId)
@@ -120,14 +129,12 @@ app.get('/register', (req, res) => {
     });
 });
 
-app.get('/profile', checkForRegistrationOrLogin, (req, res) => {
+app.get('/profile', (req, res) => {
     res.render('profile', {
         layout: 'main'
 
     });
 });
-
-
 
 app.post('/register', (req, res) => {
     console.log(req.body);
@@ -187,7 +194,7 @@ app.post('/profile', (req, res) => {
     let url = req.body.url;
     db.submitProfileData(age, city, url, req.session.userId)
         .then(result => {
-        // req.session.signatureId = result.rows[0].id;
+            console.log(result);
             res.redirect('/petition');
         })
         .catch(err => console.log("this catch",err.message));

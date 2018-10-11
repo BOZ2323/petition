@@ -71,7 +71,7 @@ exports.getUserNamefromDB = function(id){
 
 };
 
-exports.signersList = function(){
+exports.signersCount = function(){
     return db.query(
         `SELECT COUNT(*) FROM signatures`
     ).then(num => {
@@ -79,6 +79,19 @@ exports.signersList = function(){
     });
 
 };
+exports.getSignersList = function(){
+    return db.query(`
+        SELECT signatures.userid, first, last, age, url, city
+        FROM signatures
+        LEFT JOIN users
+        ON signatures.userid = users.id
+        LEFT JOIN user_profiles
+        ON user_profiles.userid = users.id ORDER by signatures.id DESC
+        `);
+};
+
+
+
 //when calling signerList in server.js
 //db.signerList().then(result =>{
 //let signers = result.row
