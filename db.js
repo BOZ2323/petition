@@ -102,17 +102,31 @@ exports.getSignersFromCity = function(city) {
     const params = [city];
     return db.query(q, params);
 };
-exports.getUpdates = function(user_id) {
+exports.checkProfileData = function(id) {
     const q = `
-    SELECT users.id AS user_id, first, last, age, city, url
-    FROM users
-    JOIN signatures
-    ON signatures.user_id = users.id
-    JOIN user_profiles
-    ON user_profiles.user_id = users.id
-    WHERE LOWER(city) = LOWER($1);
-    `;
-    const params = [city];
+    SELECT users.first, users.last, users.email,
+        user_profiles.age, user_profiles.city, user_profiles.url
+        FROM users
+        JOIN user_profiles
+        ON users.id = user_profiles.user_id
+        WHERE users.id = $1;
+        `;
+    [id]
+
+    ;
+    const params = [id];
+    return db.query(q, params);
+};
+
+exports.updateProfile = function(id, age, city, url) {
+    const q = `
+    INSERT INTO user_profiles (user_id, age, city, url)
+    VALUES ($1, $2, $3, $4)
+    ON CONFLICT (user_id)
+    DO UPDATE SET user_id = $1, age = $2, city = $3, url = $4;
+        `;
+
+    const params = [id || null, age || null, city || null, url || null];
     return db.query(q, params);
 };
 

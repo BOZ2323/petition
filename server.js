@@ -144,7 +144,7 @@ app.get('/supporter/:city', (req, res) => {
             });
 
         })
-        .catch(err => console.log("error in get/supporter", err.message));
+        .catch(err => console.log("error in get/supporter/:city", err.message));
 });
 
 function checkForRegistrationOrLogin(req,res,next){
@@ -220,6 +220,39 @@ app.post('/profile', (req, res) => {
         })
         .catch(err => console.log("this catch",err.message));
 });
+
+app.get('/myprofile', checkForRegistrationOrLogin, (req, res) => {
+    console.log("GET myprofile is working");
+    db.checkProfileData(req.session.userId)
+        .then(updatedUsers => {
+            console.log("updatedUsers", updatedUsers);
+            res.render('myprofile', {
+                layout: 'main',
+                signedUsers: updatedUsers.rows,
+                age: updatedUsers.rows[0].age,
+                city: updatedUsers.rows[0].city,
+                url: updatedUsers.rows[0].url
+            });
+
+        })
+        .catch(err => console.log("error in get/myprofile", err.message));
+
+});
+app.post('/myprofile', (req, res) => {
+    console.log("req.body", req.body);
+    console.log("req.session", req.session);//
+    let age = req.body.age; //body is on POST whatever they filled in the form
+    let city = req.body.city;
+    let url = req.body.url;
+    db.updateProfile(req.session.userId, age, city, url )
+        .then(result => {
+            console.log(result);
+            res.redirect('/');
+        })
+        .catch(err => console.log("POST /myprofile error",err.message));
+});
+
+
 
 app.listen(process.env.PORT || 8080, () => {
     console.log('Glistening on port 8080');
