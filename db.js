@@ -11,7 +11,7 @@ if (process.env.NODE_ENV === 'production') {
     secrets = process.env;
     dbUrl = secrets.DATABASE_URL;
 } else {
-    const {spicedling, password}  = require('./secrets.json');
+    const {spicedling, password}  = require('./secrets');
     dbUrl = `postgres:${spicedling}:${password}@localhost:5432/petition`;
 }
 const db = spicedPg(dbUrl);
@@ -89,6 +89,33 @@ exports.getSignersList = function(){
         ON user_profiles.user_id = users.id ORDER by signatures.id DESC
         `);
 };
+exports.getSignersFromCity = function(city) {
+    const q = `
+    SELECT users.id AS user_id, first, last, age, city, url
+    FROM users
+    JOIN signatures
+    ON signatures.user_id = users.id
+    JOIN user_profiles
+    ON user_profiles.user_id = users.id
+    WHERE LOWER(city) = LOWER($1);
+    `;
+    const params = [city];
+    return db.query(q, params);
+};
+exports.getUpdates = function(user_id) {
+    const q = `
+    SELECT users.id AS user_id, first, last, age, city, url
+    FROM users
+    JOIN signatures
+    ON signatures.user_id = users.id
+    JOIN user_profiles
+    ON user_profiles.user_id = users.id
+    WHERE LOWER(city) = LOWER($1);
+    `;
+    const params = [city];
+    return db.query(q, params);
+};
+
 
 
 
