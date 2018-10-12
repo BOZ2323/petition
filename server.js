@@ -66,8 +66,46 @@ app.post('/register', (req, res) => {
 
         });
 });
+app.get('/login', (req, res) => {
+    res.render('login', {
+        layout: 'main'
+
+    });
+});
+
+app.post('/login', (req, res) => {
+    console.log("login works!!");
+    db.getHashedPasswordfromDB(req.body.email)
+        .then(result => {
+            return db.checkPassword(req.body.password, result.rows[0].password);
+            // compares entered password with hashed password
+        })
+        .then(answer => {
+            if (answer) { //if it is true go on here and get the user ID
+                console.log("is true: ", answer);
+                db.getIdfromDB(req.body.email).then(result => {
+                    
+                    console.log("result NEU", result.rows[0].id);
+                    req.session.userId = result.rows[0].id;
+                    req.session.first = result.rows[0].first;
+                    console.log("*********",result.rows[0]);
+                    res.redirect("/petition");
+                });
+            } else { //if it false go on here
+                console.log("Incorrect Password");
+                res.render("login", {
+                    layout: "main",
+                    error: "error"
+                });
+            }
+        });
+});
+///////////////////
+app.use(checkForRegistrationOrLogin); /////////////do not cross when not registered or logged in
+////////////////////
+
 app.get('/petition', (req, res) => {
-    // console.log("first",req.session.first);
+    console.log("is there a cookie: ",req.session);
     res.render('petition', {
         layout: 'main',
         firstname: req.session.first
@@ -106,10 +144,7 @@ app.get('/thankYou', (req, res) => {
 });//app.get
 
 
-app.get('/logout', (req,res) => {
-    req.session = null;
-    res.redirect('/');
-});
+
 
 
 /////// list of all supporters from database ///////////////
@@ -166,39 +201,7 @@ function checkIfAlreadyLoggedIn(req,res,next){
 
 
 
-app.get('/login', (req, res) => {
-    res.render('login', {
-        layout: 'main'
 
-    });
-});
-
-app.post('/login', (req, res) => {
-    console.log("login works!!");
-    db.getHashedPasswordfromDB(req.body.email)
-        .then(result => {
-            return db.checkPassword(req.body.password, result.rows[0].password);
-            // compares entered password with hashed password
-        })
-        .then(answer => {
-            if (answer) { //if it is true go on here and get the user ID
-                console.log("is true: ", answer);
-                db.getIdfromDB(req.body.email).then(result => {
-                    console.log("result NEU", result.rows[0].id);
-                    req.session.userId = result.rows[0].id;
-                    req.session.first = result.rows[0].first;
-                    console.log("*********",result.rows[0]);
-                    res.redirect("/petition");
-                });
-            } else { //if it false go on here
-                console.log("Incorrect Password");
-                res.render("login", {
-                    layout: "main",
-                    error: "error"
-                });
-            }
-        });
-});
 
 app.get('/profile', (req, res) => {
     res.render('profile', {
@@ -252,6 +255,10 @@ app.post('/myprofile', (req, res) => {
         .catch(err => console.log("POST /myprofile error",err.message));
 });
 
+app.get('/logout', (req,res) => {
+    req.session = null;
+    res.redirect('/');
+});
 
 
 app.listen(process.env.PORT || 8080, () => {
