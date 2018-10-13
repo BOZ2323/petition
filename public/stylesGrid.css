@@ -20,34 +20,61 @@ nav {
     grid-area: 1 / 1 / 2/ 11;
 
 }
-.navbar a {
+.navbar_items a {
     float: left;
     font-size: 30px;
     color: white;
     padding: 30px;
     text-decoration: none;
+    font-family: Arial;
 }
-/* .navbar_items a{
-    font-size: 20px;
+.navbar_items_right a {
+    float: right;
+    font-size: 30px;
     color: white;
-} */
-
-
-
-.field {
-    grid-area: 4 / 2 / 14 / 10;
-
+    padding: 30px;
+    text-decoration: none;
+    font-family: Arial;
 }
 
+.view {
+    grid-area: 2 / 2 / 14 / 10;
+}
+
+}
 .grid div {
     background-color: purple;
 }
-.headline {
-    grid-area: 4 / 2 / 14 / 10;
 
-    font-size: 30px;
-    color: white;
+/* ////////////// home //////////////////////////////////////// */
+
+.headline {
+    grid-area: 1 / 2 / 6 / 10;
 }
+.headline p {
+
+    font-size: 100px;
+    color: white;
+    font-family: Arial;
+    font-weight: bold;
+}
+.button_home{
+    grid-area: 5 / 7 / 6 / 9;
+    color: #ed6691;
+    font: bold 70px Arial;
+  text-decoration: solid;
+  background-color: #EEEEEE;
+  box-shadow: 0px 2px 19px rgba(50, 50, 50, 0.75);
+
+
+  padding: 2px 6px 2px 34px;
+  /* border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #CCCCCC; */
+}
+/* ////////////// home //////////////////////////////////////// */
+
 
 header{
 

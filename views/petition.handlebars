@@ -1,11 +1,16 @@
-<form method="POST">
-    <h1>Hi {{firstname}}</h1>
+<div class="view">
+    <form method="POST">
 
-    <div id="sketch"><canvas id="paint" width="500" height="100" style="border:1px solid #000000;"></canvas></div>
+        <div class="headline">
+            <p> Hi {{firstname}}!</p>
+        </div>
+
+        <div id="sketch"><canvas id="paint" width="500" height="100" style="border:1px solid #000000;"></canvas></div>
 
 
 
 
-    <input id = "hidden" name="hidden" type="hidden" value="">
-    <button>submit</button>
-</form>
+        <input id = "hidden" name="hidden" type="hidden" value="">
+        <button>submit</button>
+    </form>
+</div>
