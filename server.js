@@ -137,7 +137,7 @@ app.post('/login', requireSignature, (req, res) => {
         .catch(err => {console.log(err);});
 });
 /////////////////
-// app.use(checkForRegistrationOrLogin); /////////////do not cross when not registered or logged in
+app.use(checkForRegistrationOrLogin); /////////////do not cross when not registered or logged in
 //////////////////
 
 app.get('/petition', (req, res) => {
