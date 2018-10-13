@@ -1,0 +1,29 @@
+body {
+    background-color: red;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    font-family: sans-serif;
+    font-size: 14px;
+    height: 350px;
+}
+header{
+
+}
+main{
+
+}
+aside{
+
+}
+form {
+    margin: 0px 245px;
+    padding: 0px;
+    /* width: 400px; */
+    grid-column: 4/ 4 span;
+    grid-row: 6/ 5 span;
+    height: 150px;
+}
+footer{
+
+}

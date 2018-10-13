@@ -31,6 +31,37 @@ app.use(require('cookie-parser')());
 
 // everything after the function declaration
 // in line 12 is technically middleware since it modifies a user request.
+function checkForRegistrationOrLogin(req,res,next){
+    if(!req.session.first){
+        res.redirect('/register');
+    }else{
+        next();
+    }
+}
+
+function checkIfAlreadyLoggedIn(req,res,next){
+    if(!req.session.first){
+        res.redirect('/petition/signers');
+    }else{
+        next();
+    }
+}
+
+function requireSignature(req,res,next){
+    if(!req.session.signatureId){
+        res.redirect('/petition');
+    }else{
+        next();
+    }
+}
+function requireNotSigned(req,res,next){
+    if(req.session.signatureId){
+        res.redirect('/thankYou');
+    }else{
+        next();
+    }
+}
+
 app.get('/', (req, res) => {
     res.render('home', {
         layout: 'main',
@@ -44,6 +75,7 @@ app.get('/register', (req, res) => {
 
     });
 });
+
 
 app.post('/register', (req, res) => {
     console.log(req.body);
@@ -73,36 +105,40 @@ app.get('/login', (req, res) => {
     });
 });
 
-app.post('/login', (req, res) => {
+app.post('/login', requireSignature, (req, res) => {
     console.log("login works!!");
     db.getHashedPasswordfromDB(req.body.email)
         .then(result => {
+            console.log("********* req.body.password, result.rows[0].password",req.body.password, result.rows[0].password);
             return db.checkPassword(req.body.password, result.rows[0].password);
+
             // compares entered password with hashed password
         })
         .then(answer => {
             if (answer) { //if it is true go on here and get the user ID
                 console.log("is true: ", answer);
                 db.getIdfromDB(req.body.email).then(result => {
-                    
-                    console.log("result NEU", result.rows[0].id);
                     req.session.userId = result.rows[0].id;
                     req.session.first = result.rows[0].first;
-                    console.log("*********",result.rows[0]);
-                    res.redirect("/petition");
+                    // res.redirect("/petition");
+                    return db.checkForSignature(result.rows[0].id).then(sigId => {
+                        if (sigId) {
+                            req.session.signatureId = sigId;
+                            res.redirect('/thankYou');
+                        } else {
+                            res.redirect('/profile');
+                        }
+                    });
                 });
-            } else { //if it false go on here
-                console.log("Incorrect Password");
-                res.render("login", {
-                    layout: "main",
-                    error: "error"
-                });
+            } else {
+                res.redirect('/register');
             }
-        });
+        })
+        .catch(err => {console.log(err);});
 });
-///////////////////
-app.use(checkForRegistrationOrLogin); /////////////do not cross when not registered or logged in
-////////////////////
+/////////////////
+// app.use(checkForRegistrationOrLogin); /////////////do not cross when not registered or logged in
+//////////////////
 
 app.get('/petition', (req, res) => {
     console.log("is there a cookie: ",req.session);
@@ -119,7 +155,7 @@ app.post('/petition', (req, res) => {
     db.submitSignature(sig, req.session.userId)
 
         .then(result => {
-            // req.session.signatureId = result.rows[0].id;
+            req.session.signatureId = result.rows[0].id;
             res.redirect('/thankYou');
         })
         .catch(err => console.log("this catch",err.message));
@@ -182,20 +218,6 @@ app.get('/supporter/:city', (req, res) => {
         .catch(err => console.log("error in get/supporter/:city", err.message));
 });
 
-function checkForRegistrationOrLogin(req,res,next){
-    if(!req.session.first){
-        res.redirect('/register');
-    }else{
-        next();
-    }
-}
-function checkIfAlreadyLoggedIn(req,res,next){
-    if(!req.session.first){
-        res.redirect('/petition/signers');
-    }else{
-        next();
-    }
-}
 
 
 

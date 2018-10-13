@@ -64,6 +64,23 @@ exports.getIdfromDB = function(email){
     return db.query(q, params);
 
 };
+
+// SELECT column_name(s)
+// FROM table1
+// LEFT JOIN table2 ON table1.column_name = table2.column_name;
+
+exports.checkForSignature = function(id) {
+    return db.query(
+        `SELECT id FROM signatures WHERE user_id = $1`,
+        [id])
+        .then(function(results) {
+            return results.rows[0].id;
+        });
+};
+
+
+
+
 exports.getUserNamefromDB = function(id){
     let q = `SELECT first FROM users WHERE id = $1`;
     let params = [id];
@@ -102,6 +119,9 @@ exports.getSignersFromCity = function(city) {
     const params = [city];
     return db.query(q, params);
 };
+
+
+
 exports.checkProfileData = function(id) {
     const q = `
     SELECT users.first, users.last, users.email,
@@ -117,6 +137,7 @@ exports.checkProfileData = function(id) {
     const params = [id];
     return db.query(q, params);
 };
+
 
 exports.updateProfile = function(id, age, city, url) {
     const q = `
