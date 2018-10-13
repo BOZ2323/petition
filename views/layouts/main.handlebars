@@ -9,12 +9,15 @@
     <body>
 
 
-            <div class="container">
-                {{> nav }}
+            <div class="grid">
+                <nav>
+                    {{> nav }}
+                </nav>
 
-                <!-- <h1>My petition</h1> -->
 
-                {{{ body }}}
+                <div class="field">
+                    {{{ body }}}
+                </div>
             </div>
 
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>

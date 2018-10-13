@@ -1,12 +1,54 @@
 body {
     background-color: red;
-    display: grid;
+    /* display: grid;
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: repeat(10, 1fr);
     font-family: sans-serif;
     font-size: 14px;
-    height: 350px;
+    height: 350px; */
+    margin: 0;
+    padding: 0;
 }
+.grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(20, 1fr);
+    /* grid-template-columns: 1fr, 1fr, 1fr;
+    grid-template-rows: 1fr, 1fr, 1fr; */
+}
+nav {
+    grid-area: 1 / 1 / 2/ 11;
+
+}
+.navbar a {
+    float: left;
+    font-size: 30px;
+    color: white;
+    padding: 30px;
+    text-decoration: none;
+}
+/* .navbar_items a{
+    font-size: 20px;
+    color: white;
+} */
+
+
+
+.field {
+    grid-area: 4 / 2 / 14 / 10;
+
+}
+
+.grid div {
+    background-color: purple;
+}
+.headline {
+    grid-area: 4 / 2 / 14 / 10;
+
+    font-size: 30px;
+    color: white;
+}
+
 header{
 
 }
