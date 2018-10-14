@@ -77,6 +77,7 @@ app.get('/register', (req, res) => {
 });
 
 
+
 app.post('/register', (req, res) => {
     console.log(req.body);
     db.hashPassword(req.body.password)
@@ -98,6 +99,11 @@ app.post('/register', (req, res) => {
 
         });
 });
+app.get('/logout', (req,res) => {
+    req.session = null;
+    res.redirect('/logout');
+});
+
 app.get('/login', (req, res) => {
     res.render('login', {
         layout: 'main'
@@ -172,8 +178,9 @@ app.get('/thankYou', (req, res) => {
                         layout: 'main',
                         signature: result.rows[0].signature,
                         count: count
-                    });
 
+                    });
+                    // res.redirect('/supporter');
                 })
                 .catch(err => console.log("error in get/thankYou", err.message));
         });
@@ -208,10 +215,11 @@ app.get('/supporter/:city', (req, res) => {
     db.getSignersFromCity(req.params.city)
         .then(selectedSigners => {
             console.log("selectedSigners", selectedSigners.rows);
-            console.log("age");
+            // console.log("age", selectedSigners[0].rows);
             res.render('city', {
                 layout: 'main',
                 selectedSigners: selectedSigners.rows,
+                city: req.params.city
             });
 
         })
@@ -277,10 +285,6 @@ app.post('/myprofile', (req, res) => {
         .catch(err => console.log("POST /myprofile error",err.message));
 });
 
-app.get('/logout', (req,res) => {
-    req.session = null;
-    res.redirect('/');
-});
 
 
 app.listen(process.env.PORT || 8080, () => {

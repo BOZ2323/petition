@@ -1,8 +1,9 @@
 <div class="view">
+
     <form method="POST">
 
         <div class="headline">
-            <p> Hi {{firstname}}!</p>
+            <p> Hi {{firstname}}, sign here:</p>
         </div>
 
         <div id="sketch"><canvas id="paint" width="500" height="100" style="border:1px solid #000000;"></canvas></div>
@@ -11,6 +12,8 @@
 
 
         <input id = "hidden" name="hidden" type="hidden" value="">
-        <button>submit</button>
+        <div>
+            <button class="button_register" type="submit">submit</button>
+        </div>
     </form>
 </div>

@@ -65,16 +65,122 @@ nav {
   text-decoration: solid;
   background-color: #EEEEEE;
   box-shadow: 0px 2px 19px rgba(50, 50, 50, 0.75);
+    padding: 2px 6px 2px 34px;
 
-
-  padding: 2px 6px 2px 34px;
-  /* border-top: 1px solid #CCCCCC;
-  border-right: 1px solid #333333;
-  border-bottom: 1px solid #333333;
-  border-left: 1px solid #CCCCCC; */
 }
-/* ////////////// home //////////////////////////////////////// */
+.login_home{
+    grid-area: 5 / 7 / 6 / 9;
+    color: #ed6691;
+    font: bold 70px Arial;
+  text-decoration: solid;
+  background-color: #EEEEEE;
+  box-shadow: 0px 2px 19px rgba(50, 50, 50, 0.75);
 
+
+}
+/* ////////////// supporter //////////////////////////////////////// */
+
+.signersList  {
+    font-size: 18px;
+    color: white;
+    font-family: Arial;
+    font-weight: bold;
+    text-decoration: none;
+}
+.signersList a {
+    text-decoration: none;
+    font-size: 18px;
+    color: white;
+    font-family: Arial;
+    font-weight: bold;
+}
+/* ////////////// register //////////////////////////////////////// */
+
+.register_input {
+    font-family: Arial, Sans-Serif;
+    font-size: 20px;
+    margin-bottom: 5px;
+    display: block;
+    padding: 4px;
+    background-color: white;
+    /* border: solid 1px #85b1de; */
+    width: 300px;
+    border: none;
+}
+.button_register {
+    grid-area: 5 / 7 / 6 / 9;
+    color: #ed6691;
+    font: bold 70px Arial;
+  text-decoration: solid;
+  background-color: #EEEEEE;
+  box-shadow: 0px 2px 19px rgba(50, 50, 50, 0.75);
+    /* padding: 2px 6px 2px 34px; */
+
+}
+/* ////////////// profile //////////////////////////////////////// */
+.input_profile {
+    font-family: Arial, Sans-Serif;
+    font-size: 13px;
+    margin-bottom: 5px;
+    display: block;
+    padding: 4px;
+    background-color: white;
+    /* border: solid 1px #85b1de; */
+    width: 300px;
+    border: none;
+}
+.button_profile {
+    grid-area: 5 / 7 / 6 / 9;
+    color: #ed6691;
+    font: bold 70px Arial;
+  text-decoration: solid;
+  background-color: #EEEEEE;
+  box-shadow: 0px 2px 19px rgba(50, 50, 50, 0.75);
+    /* padding: 2px 6px 2px 34px; */
+
+}
+/* ////////////// thankYou //////////////////////////////////////// */
+
+.count {
+    font-size: 100px;
+    color: white;
+    font-family: Arial;
+    font-weight: bold;
+}
+
+.input_thankyou {
+    font-family: Arial, Sans-Serif;
+    font-size: 13px;
+    margin-bottom: 5px;
+    display: block;
+    padding: 4px;
+    background-color: white;
+    /* border: solid 1px #85b1de; */
+    width: 300px;
+    border: none;
+}
+
+.button_thankyou a{
+    grid-area: 5 / 7 / 6 / 9;
+    color: #ed6691;
+    font: bold 70px Arial;
+  text-decoration: solid;
+  background-color: #EEEEEE;
+  box-shadow: 0px 2px 19px rgba(50, 50, 50, 0.75);
+    /* padding: 2px 6px 2px 34px; */
+
+}
+
+
+
+
+
+
+
+
+input{
+    border: none;
+}
 
 header{
 

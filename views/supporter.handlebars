@@ -1,20 +1,23 @@
 
         <div class="view">
-            <div class="container">
+            <div class="headline">
+                <p>you are the best!</p>
+            </div>
+            <div class="signersList">
 
-                <h1>supporter</h1>
+
                 {{#signedUsers}}
                 <!-- <p class="signees">{{first}} {{last}}</p> -->
 
                 {{#if url}}
                     <p class="supporter">
                         <a class="inline highlighted" href="{{url}}">
-                        {{first}} {{last}}</a>
+                        {{first}} {{last}},</a>
                         {{#if age}}
-                        {{age}}
+                        {{age}} years,
                         {{/if}}
                         {{#if city}}
-                        | <a class="inline" href="/supporter/{{city}}">{{city}}</a>
+                         <a class="inline" href="/supporter/{{city}}">{{city}}</a>
                         {{/if}}
 
                     </p>
@@ -25,7 +28,7 @@
                          {{age}}
                         {{/if}}
                         {{#if city}}
-                        <a class="inline" href="/supporter/{{city}}">{{city}}</a>
+                        <a class="inline" href="/petition/supporter/{{city}}">{{city}}</a>
                         {{/if}}
                     </p>
                 {{/if}}
