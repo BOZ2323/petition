@@ -101,7 +101,10 @@ app.post('/register', (req, res) => {
 });
 app.get('/logout', (req,res) => {
     req.session = null;
-    res.redirect('/logout');
+    res.render('logout', {
+        layout: 'main'
+
+    });
 });
 
 app.get('/login', (req, res) => {

@@ -24,7 +24,7 @@ nav {
     float: left;
     font-size: 30px;
     color: white;
-    padding: 30px;
+    padding: 30px 30px 0px 30px;
     text-decoration: none;
     font-family: Arial;
 }
@@ -32,7 +32,7 @@ nav {
     float: right;
     font-size: 30px;
     color: white;
-    padding: 30px;
+    padding: 30px 30px 0px 30px;
     text-decoration: none;
     font-family: Arial;
 }
@@ -51,14 +51,15 @@ nav {
 .headline {
     grid-area: 1 / 2 / 6 / 10;
 }
-.headline p {
-
+.headline {
     font-size: 100px;
     color: white;
     font-family: Arial;
     font-weight: bold;
+    margin: none;
 }
 .button_home{
+    float: right;
     grid-area: 5 / 7 / 6 / 9;
     color: #ed6691;
     font: bold 70px Arial;
@@ -108,6 +109,7 @@ nav {
     border: none;
 }
 .button_register {
+    padding-top: 10px;
     grid-area: 5 / 7 / 6 / 9;
     color: #ed6691;
     font: bold 70px Arial;
@@ -161,6 +163,7 @@ nav {
 }
 
 .button_thankyou a{
+
     grid-area: 5 / 7 / 6 / 9;
     color: #ed6691;
     font: bold 70px Arial;
@@ -192,12 +195,12 @@ aside{
 
 }
 form {
-    margin: 0px 245px;
+    margin: 0px 200px;
     padding: 0px;
-    /* width: 400px; */
+
     grid-column: 4/ 4 span;
     grid-row: 6/ 5 span;
-    height: 150px;
+
 }
 footer{
 
