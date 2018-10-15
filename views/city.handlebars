@@ -1,39 +1,37 @@
 <div class="view">
-
-    <div class="view">
         <div class="headline">
-            <p>thank you, {{city}}!</p>
+            <p>and thank you, {{city}}!</p>
         </div>
-        <div class="signersList">
+            <div class="signersList">
 
-            {{#selectedSigners}}
-            <!-- <p class="signees">{{first}} {{last}}</p> -->
+                {{#selectedSigners}}
+                <!-- <p class="signees">{{first}} {{last}}</p> -->
 
-                {{#if url}}
-                    <p class="supporter">
-                        <i></i>  &nbsp;<a class="inline highlighted" href="{{url}}">
-                        {{first}} {{last}}</a>
-                        {{#if age}}
-                        | {{age}}
-                        {{/if}}
-                        <!-- {{#if city}}
-                        | <a class="inline" href="/petition/signers/{{city}}">{{city}}</a>
-                        {{/if}} -->
+                    {{#if url}}
+                        <p class="supporter">
+                            <i></i>  &nbsp;<a class="inline highlighted" href="{{url}}">
+                            {{first}} {{last}},</a>
+                            {{#if age}}
+                            {{age}} years
+                            {{/if}}
+                            <!-- {{#if city}}
+                            | <a class="inline" href="/petition/signers/{{city}}">{{city}}</a>
+                            {{/if}} -->
 
-                    </p>
-                {{else}}
-                    <p class="supporter">
-                        {{first}} {{last}}
-                        {{#if age}}
-                        |  {{age}}
-                        {{/if}}
-                        {{#if city}}
-                        |  <a class="inline" href="/supporter/{{city}}">{{city}}</a>
+                        </p>
+                    {{else}}
+                        <p class="supporter">
+                            {{first}} {{last}},
+                            {{#if age}}
+                             {{age}} years
+                            {{/if}}
+                            {{#if city}}
+                            <a class="inline" href="/supporter/{{city}}">{{city}}</a>
 
-                        {{/if}}
-                    </p>
-                {{/if}}
-            {{/selectedSigners}}
+                            {{/if}}
+                        </p>
+                    {{/if}}
+                {{/selectedSigners}}
 
-        </div>
+            </div>
 </div>

@@ -38,15 +38,15 @@ function checkForRegistrationOrLogin(req,res,next){
         next();
     }
 }
-
+///////////////// changes here /////////////////
 function checkIfAlreadyLoggedIn(req,res,next){
     if(!req.session.first){
-        res.redirect('/petition/signers');
+        res.redirect('/supporter');
     }else{
         next();
     }
 }
-
+///////////////// changes here /////////////////
 function requireSignature(req,res,next){
     if(!req.session.signatureId){
         res.redirect('/petition');
@@ -107,6 +107,13 @@ app.get('/logout', (req,res) => {
     });
 });
 
+app.get('/updated', (req, res) => {
+    res.render('updated', {
+        layout: 'main'
+
+    });
+});
+
 app.get('/login', (req, res) => {
     res.render('login', {
         layout: 'main'
@@ -146,7 +153,7 @@ app.post('/login', requireSignature, (req, res) => {
         .catch(err => {console.log(err);});
 });
 /////////////////
-app.use(checkForRegistrationOrLogin); /////////////do not cross when not registered or logged in
+// app.use(checkForRegistrationOrLogin); /////////////do not cross when not registered or logged in
 //////////////////
 
 app.get('/petition', (req, res) => {
@@ -222,19 +229,13 @@ app.get('/supporter/:city', (req, res) => {
             res.render('city', {
                 layout: 'main',
                 selectedSigners: selectedSigners.rows,
-                city: req.params.city
+                city: req.params.city,
+                url: req.params.url
             });
 
         })
         .catch(err => console.log("error in get/supporter/:city", err.message));
 });
-
-
-
-
-
-
-
 
 app.get('/profile', (req, res) => {
     res.render('profile', {
@@ -283,12 +284,10 @@ app.post('/myprofile', (req, res) => {
     db.updateProfile(req.session.userId, age, city, url )
         .then(result => {
             console.log(result);
-            res.redirect('/');
+            res.redirect('/updated'); ////// just changed / to /updated
         })
         .catch(err => console.log("POST /myprofile error",err.message));
 });
-
-
 
 app.listen(process.env.PORT || 8080, () => {
     console.log('Glistening on port 8080');

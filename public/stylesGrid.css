@@ -9,6 +9,9 @@ body {
     margin: 0;
     padding: 0;
 }
+canvas{
+    border: red;
+}
 .grid {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
