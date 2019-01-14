@@ -1,0 +1,16 @@
+*{
+box-sizing: red;
+}
+body{
+    background: green;
+    margin: 0;
+}
+main:
+display: grid;
+grid-template-columsn:: repaea(auto-fit, minmax(200px, 1fr));
+}
+img {
+display: block;
+box-shadow: -1px 0px 0p rgba(0,0,0,0,0,0,06);
+width: 100%
+}

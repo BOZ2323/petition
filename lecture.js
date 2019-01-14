@@ -6,7 +6,7 @@ db.query(
 ).then(
     result => console.log(result)
 ).catch(
-    err => console.log(err);
+    err => console.log(err)
 )
 
 
@@ -14,7 +14,7 @@ db.query(
 .then (
     ({rows}) => {
         rows.forEach(
-            row => console.log("hey");
+            row => console.log("hey")
         )
     }
 }
@@ -25,7 +25,7 @@ db.query(
      .then (
          ({rows}) => {
              rows.forEach(
-                 row => console.log("hey");
+                 row => console.log("hey")
              )
          }
      }
@@ -58,8 +58,45 @@ exports.getCityByName(name){
 
 CREATE TABLE signature(
 			id SERIAL PRIMARY KEY,
-			first VARCHAR(100)
-			last VARCHAR(200)
-			signature TEXT
+			first VARCHAR(100) NOT NULL
+			last VARCHAR(200) NOT NULL
+			signature TEXT NOT NULL
 
 );
+
+put in database request.body(firstname)
+request.body(lastname)
+request.body(signature)
+
+{{#if error}}
+<div class = "error">you messed up</div>
+{{/if}}
+
+<form method="POST">
+    <input>
+    <input>
+    <input>
+button butoon
+form
+
+
+////////////// slack from David
+
+const spicedPg = require('spiced-pg');
+const {dbUser, dbPassword} = require('./secrets');
+
+const db = spicedPg(`postgres:${dbUser}:${dbPassword}@localhost:5432/sage`);
+
+exports.getCityByName(name) {
+    return db.query(
+        `SELECT * FROM cities WHERE name = $1`,
+        [name]
+    );
+}
+
+exports.getCityByNameAndState(name, state) {
+    return db.query(
+        `SELECT * FROM cities WHERE name = $1 AND state = $2`,
+        [name, state]
+    );
+}
